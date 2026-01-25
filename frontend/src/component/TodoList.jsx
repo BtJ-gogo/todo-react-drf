@@ -82,7 +82,7 @@ function TodoList() {
       const newTask = await response.json();
       setTasks(prev => [...prev, newTask]);
       setInputValue({ task: "", due_date: "" });
-      
+
     } catch (error) {
       console.error("Error creating task:", error);
       alert("Failed to create task. Please try again.");
@@ -120,7 +120,7 @@ function TodoList() {
             <input type="checkbox" checked={task.completed || false} onChange={() => toggleTask(task.id)} />
             {task.completed ? <span style={{ textDecoration: "line-through", color: "gray" }}>{task.task}</span> : task.task}
             <small>{task.due_date}</small>
-            <i class="bi bi-trash-fill" onClick={() => deleteTask(task.id)}></i>
+            <i className="bi bi-trash-fill" onClick={() => deleteTask(task.id)}></i>
           </li>
         ))}
       </ul>
