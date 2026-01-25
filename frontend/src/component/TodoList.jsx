@@ -81,6 +81,8 @@ function TodoList() {
       
       const newTask = await response.json();
       setTasks(prev => [...prev, newTask]);
+      setInputValue({ task: "", due_date: "" });
+      
     } catch (error) {
       console.error("Error creating task:", error);
       alert("Failed to create task. Please try again.");
