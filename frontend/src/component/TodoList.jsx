@@ -71,7 +71,7 @@ function TodoList() {
         body: JSON.stringify({
           task: inputValue.task,
           completed: false,
-          due_date: inputValue.due_date,
+          due_date: inputValue.due_date ? inputValue.due_date : null,
         }),
       })
 
