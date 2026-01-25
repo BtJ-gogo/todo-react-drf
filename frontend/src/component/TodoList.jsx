@@ -52,7 +52,7 @@ function TodoList() {
     }
   }
 
-  const hundleChage = (e) => {
+  const hundleChange = (e) => {
     const { name, value } = e.target;
     setInputValue((prev) => ({
       ...prev,
@@ -110,8 +110,8 @@ function TodoList() {
   return (
     <>
       <form onSubmit={addTask} className="margin-b1">
-        <input name="task" type="text" className="margin-r1" placeholder="Add a new task..." value={inputValue.task} onChange={hundleChage} />
-        <input name="due_date" type="date" className="margin-r1" value={inputValue.due_date} onChange={hundleChage} />
+        <input name="task" type="text" className="margin-r1" placeholder="Add a new task..." value={inputValue.task} onChange={hundleChange} />
+        <input name="due_date" type="date" className="margin-r1" value={inputValue.due_date} onChange={hundleChange} />
         <button type="submit" className="margin-t1 btn-gradient-radius">Add</button>
       </form>
       <div className="task-container">
