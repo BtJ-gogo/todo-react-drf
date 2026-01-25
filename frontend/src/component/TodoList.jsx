@@ -109,21 +109,23 @@ function TodoList() {
 
   return (
     <>
-      <form onSubmit={addTask}>
-        <input name="task" type="text" placeholder="Add a new task..." value={inputValue.task} onChange={hundleChage} />
-        <input name="due_date" type="date" value={inputValue.due_date} onChange={hundleChage} />
-        <button type="submit">Add</button>
+      <form onSubmit={addTask} className="margin-b1">
+        <input name="task" type="text" className="margin-r1" placeholder="Add a new task..." value={inputValue.task} onChange={hundleChage} />
+        <input name="due_date" type="date" className="margin-r1" value={inputValue.due_date} onChange={hundleChage} />
+        <button type="submit" className="margin-t1 btn-gradient-radius">Add</button>
       </form>
-      <ul>
+      <div className="task-container">
         {tasks.map((task) => (
-          <li key={task.id}>
-            <input type="checkbox" checked={task.completed || false} onChange={() => toggleTask(task.id)} />
-            {task.completed ? <span style={{ textDecoration: "line-through", color: "gray" }}>{task.task}</span> : task.task}
+          <label key={task.id} className="task">
+            <div>
+              <input type="checkbox" className="margin-r1" checked={task.completed || false} onChange={() => toggleTask(task.id)} />
+              {task.completed ? <span className="margin-r1" style={{ textDecoration: "line-through", color: "gray" }}>{task.task}</span> : <span className="margin-r1">{task.task}</span>}
+            </div>
             <small>{task.due_date}</small>
             <i className="bi bi-trash-fill" onClick={() => deleteTask(task.id)}></i>
-          </li>
+          </label>
         ))}
-      </ul>
+      </div>
     </>
   );
 }
