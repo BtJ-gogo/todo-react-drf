@@ -46,7 +46,7 @@ function TodoList() {
             throw new Error("Failed to update task");
         }
     } catch (error) {
-        console.error("Error updating task:", error);
+        console.error(error);
         setTasks(prevTasks);
         alert("Failed to update task. Please try again.");
     }
@@ -62,6 +62,7 @@ function TodoList() {
 
 
   const addTask = async (e) => {
+    const prevTasks = tasks;
     e.preventDefault();
     if (!inputValue.task.trim()) return;
 
@@ -85,12 +86,14 @@ function TodoList() {
       setInputValue({ task: "", due_date: "" });
 
     } catch (error) {
-      console.error("Error creating task:", error);
+      console.error(error);
+      setTasks(prevTasks);
       alert("Failed to create task. Please try again.");
     }
   };
 
   const deleteTask = async (id) => {
+    const prevTasks = tasks;
     try {
       const response = await fetch(`http://localhost:8000/api/tasks/${id}/`, {
         method: "DELETE",
@@ -100,11 +103,11 @@ function TodoList() {
       }
       setTasks(prev => prev.filter(task => task.id !== id));
     } catch (error) {
-      console.error("Error deleting task:", error);
+      console.error(error);
+      setTasks(prevTasks);
       alert("Failed to delete task. Please try again.");
     }
   }
-
 
   if (isLoading) return <p>Loading...</p>;
 
@@ -117,14 +120,14 @@ function TodoList() {
       </form>
       <div className="task-container">
         {tasks.map((task) => (
-          <label key={task.id} className="task">
-            <div>
+          <div key={task.id} className="task">
+            <label>
               <input type="checkbox" className="margin-r1" checked={task.completed || false} onChange={() => toggleTask(task.id)} />
               {task.completed ? <span className="margin-r1" style={{ textDecoration: "line-through", color: "gray" }}>{task.task}</span> : <span className="margin-r1">{task.task}</span>}
-            </div>
-            <small>{task.due_date}</small>
+              <small>{task.due_date}</small>
+            </label>
             <i className="bi bi-trash-fill" onClick={() => deleteTask(task.id)}></i>
-          </label>
+          </div>
         ))}
       </div>
     </>
