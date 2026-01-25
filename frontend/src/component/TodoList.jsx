@@ -63,6 +63,7 @@ function TodoList() {
 
   const addTask = async (e) => {
     e.preventDefault();
+    if (!inputValue.task.trim()) return;
 
     try {
       const response = await fetch("http://localhost:8000/api/tasks/", {
