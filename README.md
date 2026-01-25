@@ -1,7 +1,7 @@
 # Django EC Project
 
 React、Django REST Frameworkで作成したTodoアプリです。
-コアとなるCRUD機能を優先ｓるうため、認証は省略しています。
+コアとなるCRUD機能を優先するため、認証は省略しています。
 
 ## 主な機能
 
