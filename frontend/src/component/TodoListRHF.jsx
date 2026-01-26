@@ -5,7 +5,7 @@ function TodoList() {
   const [tasks, setTasks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const {register, handleSubmit, reset} = useForm();
+  const {register, handleSubmit, reset, formState: {errors, isValid}} = useForm();
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -77,37 +77,6 @@ function TodoList() {
     }
   }
 
-/*
-  const addTask = async (e) => {
-    e.preventDefault();
-    if (!inputValue.task.trim()) return;
-
-    try {
-      const response = await fetch("http://localhost:8000/api/tasks/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          task: inputValue.task,
-          completed: false,
-          due_date: inputValue.due_date ? inputValue.due_date : null,
-        }),
-      })
-
-      if (!response.ok) {
-        throw new Error("Failed to create task");
-      }
-      
-      const newTask = await response.json();
-      setTasks(prev => [...prev, newTask]);
-      setInputValue({ task: "", due_date: "" });
-
-    } catch (error) {
-      console.error(error);
-      alert("Failed to create task. Please try again.");
-    }
-  };
-*/
-
   const deleteTask = async (id) => {
     try {
       const response = await fetch(`http://localhost:8000/api/tasks/${id}/`, {
@@ -128,9 +97,10 @@ function TodoList() {
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)} className="margin-b1">
-        <input name="task" type="text" className="margin-r1" placeholder="Add a new task..." {...register("task", {required: "必須", validate: (v) => v.trim() !== "" || "空白のみは不可",})} />
-        <input name="due_date" type="date" className="margin-r1" {...register("due_date")} />
-        <button type="submit" className="margin-t1 btn-gradient-radius">Add</button>
+        <input type="text" className="margin-r1" placeholder="Add a new task..." {...register("task", {required: "タスクの入力は必須です。", validate: (v) => v.trim() !== "" || "空白のみは不可",})} />
+        {errors.task && <span style={{ color: "red", display: "block" }}>{errors.task.message}</span>}
+        <input type="date" className="margin-r1" {...register("due_date")} />
+        <button type="submit" className="margin-t1 btn-gradient-radius" disabled={!isValid}>Add</button>
       </form>
       <div className="task-container">
         {tasks.map((task) => (
