@@ -62,7 +62,6 @@ function TodoList() {
 
 
   const addTask = async (e) => {
-    const prevTasks = [...tasks];
     e.preventDefault();
     if (!inputValue.task.trim()) return;
 
@@ -87,13 +86,11 @@ function TodoList() {
 
     } catch (error) {
       console.error(error);
-      setTasks(prevTasks);
       alert("Failed to create task. Please try again.");
     }
   };
 
   const deleteTask = async (id) => {
-    const prevTasks = [...tasks];
     try {
       const response = await fetch(`http://localhost:8000/api/tasks/${id}/`, {
         method: "DELETE",
@@ -104,7 +101,6 @@ function TodoList() {
       setTasks(prev => prev.filter(task => task.id !== id));
     } catch (error) {
       console.error(error);
-      setTasks(prevTasks);
       alert("Failed to delete task. Please try again.");
     }
   }
