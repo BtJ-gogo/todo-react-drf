@@ -24,7 +24,7 @@ function TodoList() {
   }, []);
 
   const toggleTask = async (id) => {
-    const prevTasks = tasks
+    const prevTasks = [...tasks]
 
     const updatedTasks = tasks.map( task => 
         task.id === id ? {...task, completed: !task.completed} : task
@@ -62,7 +62,7 @@ function TodoList() {
 
 
   const addTask = async (e) => {
-    const prevTasks = tasks;
+    const prevTasks = [...tasks];
     e.preventDefault();
     if (!inputValue.task.trim()) return;
 
@@ -93,7 +93,7 @@ function TodoList() {
   };
 
   const deleteTask = async (id) => {
-    const prevTasks = tasks;
+    const prevTasks = [...tasks];
     try {
       const response = await fetch(`http://localhost:8000/api/tasks/${id}/`, {
         method: "DELETE",
