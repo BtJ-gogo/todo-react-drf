@@ -13,13 +13,5 @@ class Todo(models.Model):
     def __str__(self):
         return f"{self.task}"
 
-    def get_absolute_url(self):
-        return reverse("task_update", kwargs={"pk": self.pk})
-
     class Meta:
         ordering = ["completed", "-created_at"]
-
-    def overdue(self):
-        if self.due_date:
-            return timezone.now().date() > self.due_date
-        return False
