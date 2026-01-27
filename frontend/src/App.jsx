@@ -1,17 +1,16 @@
-import TodoList from "./component/TodoList";
-import TodoListRHF from "./component/TodoListRHF";
-import TodoListRHFZod from "./component/TodoListRHFZod";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from "./component/Login";
+import TodoList from "./component/TodoListRHFZod";
+import PrivateRoute from "./component/PrivateRoute";
 
 function App() {
   return (
-    <>
-      <main>
-        <h1>Task List</h1>
-        {/* <TodoList></TodoList> */}
-        {/* <TodoListRHF></TodoListRHF> */}
-        <TodoListRHFZod></TodoListRHFZod>
-      </main>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<PrivateRoute><TodoList /></PrivateRoute>} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
