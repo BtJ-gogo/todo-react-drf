@@ -1,0 +1,135 @@
+import { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+const schema = z.object({
+    task: z.string().min(1, "必須です。"),
+    due_date: z
+        .string()
+        .optional()
+        .refine(
+            (val) => !val || /^\d{4}-\d{2}-\d{2}$/.test(val),
+            "日付形式が不正です。"
+        ),
+});
+
+
+function TodoList() {
+  const [tasks, setTasks] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const {register, handleSubmit, reset, formState: {errors, isValid}} = useForm({resolver: zodResolver(schema), defaultValues: {task: "", due_date: ""}});
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/api/tasks/");
+        const data = await response.json();
+        setTasks(data);
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchTasks();
+  }, []);
+
+  const toggleTask = async (id) => {
+    const prevTasks = [...tasks]
+
+    const updatedTasks = tasks.map( task => 
+        task.id === id ? {...task, completed: !task.completed} : task
+    )
+
+    setTasks(updatedTasks)
+
+    const targetTask = updatedTasks.find(task => task.id === id);
+
+    try {
+        const response = await fetch(`http://localhost:8000/api/tasks/${id}/`,
+            {
+                method: "PATCH",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({completed: targetTask.completed,})
+            }
+        )
+        if (!response.ok) {
+            throw new Error("Failed to update task");
+        }
+    } catch (error) {
+        console.error(error);
+        setTasks(prevTasks);
+        alert("Failed to update task. Please try again.");
+    }
+  }
+
+  const onSubmit = async (data) => {
+    try {
+        const response = await fetch("http://localhost:8000/api/tasks/", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+            task: data.task,
+            completed: false,
+            due_date: data.due_date || null,
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to create task");
+      }
+      
+      const newTask = await response.json();
+      setTasks(prev => [...prev, newTask]);
+      reset();
+
+    } catch (error) {
+      console.error(error);
+      alert("Failed to create task. Please try again.");
+    }
+  }
+
+  const deleteTask = async (id) => {
+    try {
+      const response = await fetch(`http://localhost:8000/api/tasks/${id}/`, {
+        method: "DELETE",
+      });
+      if (!response.ok) {
+        throw new Error("Failed to delete task");
+      }
+      setTasks(prev => prev.filter(task => task.id !== id));
+    } catch (error) {
+      console.error(error);
+      alert("Failed to delete task. Please try again.");
+    }
+  }
+
+  if (isLoading) return <p>Loading...</p>;
+
+  return (
+    <>
+      <form onSubmit={handleSubmit(onSubmit)} className="margin-b1">
+        <input type="text" className="margin-r1" placeholder="Add a new task..." {...register("task", {required: "タスクの入力は必須です。", validate: (v) => v.trim() !== "" || "空白のみは不可",})} />
+        {errors.task && <span style={{ color: "red", display: "block" }}>{errors.task.message}</span>}
+        <input type="date" className="margin-r1" {...register("due_date")} />
+        <button type="submit" className="margin-t1 btn-gradient-radius" disabled={!isValid}>Add</button>
+      </form>
+      <div className="task-container">
+        {tasks.map((task) => (
+          <div key={task.id} className="task">
+            <label>
+              <input type="checkbox" className="margin-r1" checked={task.completed || false} onChange={() => toggleTask(task.id)} />
+              {task.completed ? <span className="margin-r1" style={{ textDecoration: "line-through", color: "gray" }}>{task.task}</span> : <span className="margin-r1">{task.task}</span>}
+              <small>{task.due_date}</small>
+            </label>
+            <i className="bi bi-trash-fill" onClick={() => deleteTask(task.id)}></i>
+          </div>
+        ))}
+      </div>
+    </>
+  );
+}
+
+export default TodoList;
