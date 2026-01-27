@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
 const schema = z.object({
-    task: z.string().min(1, "必須です。"),
+    task: z.string().min(1, "タスクの入力は必須です。"),
     due_date: z
         .string()
         .optional()
@@ -19,7 +19,7 @@ function TodoList() {
   const [tasks, setTasks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const {register, handleSubmit, reset, formState: {errors, isValid}} = useForm({resolver: zodResolver(schema), defaultValues: {task: "", due_date: ""}});
+  const {register, handleSubmit, reset, formState: {errors}} = useForm({resolver: zodResolver(schema), defaultValues: {task: "", due_date: ""}});
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -111,11 +111,12 @@ function TodoList() {
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)} className="margin-b1">
-        <input type="text" className="margin-r1" placeholder="Add a new task..." {...register("task", {required: "タスクの入力は必須です。", validate: (v) => v.trim() !== "" || "空白のみは不可",})} />
-        {errors.task && <span style={{ color: "red", display: "block" }}>{errors.task.message}</span>}
+        <input type="text" className="margin-r1" placeholder="Add a new task..." {...register("task")} />
         <input type="date" className="margin-r1" {...register("due_date")} />
-        <button type="submit" className="margin-t1 btn-gradient-radius" disabled={!isValid}>Add</button>
+        <button type="submit" className="margin-t1 btn-gradient-radius">Add</button>
+        {errors.task && <span style={{ color: "red", display: "block" }}>{errors.task.message}</span>}
       </form>
+      
       <div className="task-container">
         {tasks.map((task) => (
           <div key={task.id} className="task">
