@@ -16,7 +16,7 @@ React、Django REST Frameworkで作成したTodoアプリです。
 - バックエンド
   - Django 5.2.10
   - Django Rest Framework 3.16.1
-  - django-Cors-headers 4.9.0
+  - django-cors-headers 4.9.0
 - データベース
   - SQLite(開発用)
 - プログラミング言語
