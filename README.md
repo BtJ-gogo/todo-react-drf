@@ -10,7 +10,9 @@ React、Django REST Frameworkで作成したTodoアプリです。
 ## 使用技術
 
 - フロントエンド
-  - React
+  - React  
+  - React Hook Form  
+  - Zod  
 - バックエンド
   - Django 5.2.10
   - Django Rest Framework 3.16.1
