@@ -6,7 +6,7 @@ import { z } from "zod";
 import {useNavigate} from "react-router-dom";
 
 const schema = z.object({
-    task: z.string().min(1, "タスクの入力は必須です。"),
+    task: z.string().trim().min(1, "タスクの入力は必須です。"),
     due_date: z
         .string()
         .optional()
