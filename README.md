@@ -1,22 +1,25 @@
 # Todoアプリ
 
 React、Django REST Frameworkで作成したTodoアプリです。
-コアとなるCRUD機能を優先するため、認証は省略しています。
+認証(JSON Web Token)、タスクのCRUD機能を実装しています。
 
 ## 主な機能
 
 - タスクのCRUD機能
+- 認証機能
 
 ## 使用技術
 
 - フロントエンド
   - React  
   - React Hook Form  
-  - Zod  
+  - Zod
+  - React Router DOM  
 - バックエンド
   - Django 5.2.10
   - Django Rest Framework 3.16.1
   - django-cors-headers 4.9.0
+  - djangorestframework-simplejwt
 - データベース
   - SQLite(開発用)
 - プログラミング言語
@@ -50,3 +53,6 @@ python manage.py createsuperuser
 # 開発サーバー起動
 python manage.py runserver
 ```
+
+## 今後の課題
+- XSSに対する対応
