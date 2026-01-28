@@ -31,6 +31,7 @@ React、Django REST Frameworkで作成したTodoアプリです。
 
 # 開発サーバー起動
 cd frontend
+npm install
 npm run dev
 ```
 
