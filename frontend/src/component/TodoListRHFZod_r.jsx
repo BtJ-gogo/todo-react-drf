@@ -125,6 +125,7 @@ function TodoList() {
     localStorage.removeItem("refresh");
     navigate("/login");
   }
+  
   if (isLoading) return <p>Loading...</p>;
 
   return (
