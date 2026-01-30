@@ -4,6 +4,7 @@ const fetchTasks = async (url, options={}, navigate, authHeaders) => {
         localStorage.removeItem("refresh");
         navigate("/login");
     }
+
     const response = await fetch(url, {
         ...options,
         headers: authHeaders(),
@@ -42,9 +43,7 @@ const fetchTasks = async (url, options={}, navigate, authHeaders) => {
             return retryResponse;
 
         } catch (error) {
-            localStorage.removeItem("access");
-            localStorage.removeItem("refresh");
-            navigate("/login");
+            logout();
             throw new Error(error.message);
         }
                
